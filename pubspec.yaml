@@ -1,0 +1,26 @@
+name: test_runner_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+environment:
+  sdk: ^3.7.2
+dependencies:
+  flutter_svg: ^2.1.0
+  geolocator: ^10.0.0
+  pedometer: ^4.1.1
+  flutter:
+    sdk: flutter
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
+  cupertino_icons: ^1.0.8
+  permission_handler: ^12.0.0+1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    -  assets/maps/Fonzaland_map.png
+    -  assets/data/Fonzaland_world_data.json
+    -  assets/data/Fonzaland_Burgs.csv
