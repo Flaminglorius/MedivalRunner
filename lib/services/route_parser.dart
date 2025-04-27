@@ -1,22 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:test_runner_app/services/map_utils.dart';
-
-class RouteData {
-  final String name;
-  final List<Offset> path;
-
-  RouteData({required this.name, required this.path});
-}
+import 'package:test_runner_app/map_system/geojson_loader.dart'; // <- neu importieren, falls du die neue GeoJsonLoader hast
 
 class RouteParser {
   static Future<List<RouteData>> loadRoutesFromGeoJson() async {
-    final data = await rootBundle.loadString('assets/routes/test_route.geojson');
+    final data = await rootBundle.loadString('assets/routes/Fonzaland_Routes.geojson');
     final json = jsonDecode(data);
 
     print("GeoJSON Inhalt geladen:");
-    print(json); // <-- DAS HIER IST NEU!
+    print(json);
 
     final List<RouteData> routes = [];
 
@@ -33,11 +26,11 @@ class RouteParser {
           return MapUtils.gpsToPixel(lat, lon);
         }).toList();
 
-        routes.add(RouteData(name: name, path: points));
+        routes.add(RouteData(points: points));
       }
     }
 
-    print("Fertig geladen: ${routes.length} Routen"); // <-- Auch SEHR WICHTIG!
+    print("Fertig geladen: ${routes.length} Routen");
 
     return routes;
   }
