@@ -29,24 +29,27 @@ class GeoJsonLoader {
           List<Offset> points = [];
 
           for (var coord in coordinates) {
-            final lon = coord[0] as double;
-            final lat = coord[1] as double;
+            final lon = (coord[0] as num).toDouble();
+            final lat = (coord[1] as num).toDouble();
             final mapped = mapper.mapCoordinate(lon, lat);
+
+
 
             points.add(mapped);
           }
 
           if (points.isNotEmpty) {
+
             routes.add(RouteData(points: points));
           }
         }
       }
 
-      print('Fertig geladen: ${routes.length} Routen');
+
       return routes;
     } catch (e) {
       print('Fehler beim Laden der GeoJSON: $e');
       return [];
     }
   }
-}
+  }

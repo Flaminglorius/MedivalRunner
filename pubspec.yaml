@@ -22,3 +22,4 @@ flutter:
   uses-material-design: true
   assets:
     -  assets/routes/Fonzaland_Routes.geojson
+    -  assets/maps/Fonzaland.svg
