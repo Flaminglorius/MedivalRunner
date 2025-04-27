@@ -24,3 +24,6 @@ flutter:
     -  assets/maps/Fonzaland_map.png
     -  assets/data/Fonzaland_world_data.json
     -  assets/data/Fonzaland_Burgs.csv
+    -  assets/maps/Fonzaland.svg
+    -  assets/routes/Fonzaland_Routes.geojson
+    -  assets/routes/test_route.geojson

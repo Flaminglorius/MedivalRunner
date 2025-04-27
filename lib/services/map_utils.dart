@@ -7,15 +7,27 @@ class MapUtils {
   static const double mapHeight = 4920;
 
   // Virtuelles Koordinatensystem deiner Fantasy-Welt
-  static const double mapLeftLon = 10.0;   // Westen
-  static const double mapRightLon = 20.0;  // Osten
-  static const double mapTopLat = 50.0;    // Norden
-  static const double mapBottomLat = 40.0; // Süden
+  static const double mapLeftLon = -24.0;   // Westen
+  static const double mapRightLon = 24.0;   // Osten
+  static const double mapTopLat = 12.0;     // Norden
+  static const double mapBottomLat = -9.0;  // Süden
 
   /// Konvertiert GPS-Koordinaten in Pixelkoordinaten auf der PNG
   static Offset gpsToPixel(double lat, double lon) {
     double x = ((lon - mapLeftLon) / (mapRightLon - mapLeftLon)) * mapWidth;
+    double xOffset = 20; // Fester horizontaler Offset
+    x -= xOffset;
+
     double y = ((mapTopLat - lat) / (mapTopLat - mapBottomLat)) * mapHeight;
+
+    // Dynamische Y-Korrektur je nach Position (nördlich = mehr Korrektur)
+    double correctionStrength = 150; // ← Kannst du anpassen!
+    double factor = y / mapHeight;  // 0 (oben) bis 1 (unten)
+    double yCorrection = correctionStrength * pow(factor, 2);
+    y -= yCorrection;
+
+    print("gpsToPixel → lat: $lat, lon: $lon → x: ${x.toStringAsFixed(2)}, y: ${y.toStringAsFixed(2)} (Korrektur: ${yCorrection.toStringAsFixed(2)})");
+
     return Offset(x, y);
   }
 
