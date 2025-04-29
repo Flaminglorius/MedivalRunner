@@ -1,7 +1,8 @@
+import 'package:test_runner_app/map_system/route_data.dart';
+import 'package:test_runner_app/services/map_utils.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:test_runner_app/services/map_utils.dart';
-import 'package:test_runner_app/map_system/geojson_loader.dart'; // <- neu importieren, falls du die neue GeoJsonLoader hast
+import 'dart:ui';
 
 class RouteParser {
   static Future<List<RouteData>> loadRoutesFromGeoJson() async {
@@ -26,7 +27,8 @@ class RouteParser {
           return MapUtils.gpsToPixel(lat, lon);
         }).toList();
 
-        routes.add(RouteData(points: points));
+        // HIER FÜGEN WIR DIE ROUTE ZUR LISTE HINZU:
+        routes.add(RouteData(name: name, points: points));
       }
     }
 

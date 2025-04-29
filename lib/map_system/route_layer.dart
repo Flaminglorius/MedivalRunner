@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
-import 'geojson_loader.dart';
-import 'coordinate_mapper.dart';
 import 'package:test_runner_app/services/map_utils.dart';
 import 'package:test_runner_app/map_system/routes_painter.dart';
+import 'package:test_runner_app/map_system/geojson_loader.dart';
+import 'package:test_runner_app/map_system/coordinate_mapper.dart';
+import 'package:test_runner_app/map_system/route_data.dart';
+
+
 
 class RouteLayer extends StatefulWidget {
   const RouteLayer({super.key});
 
   @override
-  _RouteLayerState createState() => _RouteLayerState();
+  RouteLayerState createState() => RouteLayerState();
 }
 
-class _RouteLayerState extends State<RouteLayer> {
+
+
+class RouteLayerState extends State<RouteLayer> {
   List<RouteData> _routes = [];
+
 
   @override
   void initState() {
     super.initState();
     _loadRoutes();
   }
+
 
   void _loadRoutes() async {
     final mapper = CoordinateMapper(
@@ -35,6 +42,7 @@ class _RouteLayerState extends State<RouteLayer> {
       _routes = loadedRoutes;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,55 +1,33 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'coordinate_mapper.dart';
-
-class RouteData {
-  final List<Offset> points;
-  RouteData({required this.points});
-}
+import 'package:test_runner_app/map_system/coordinate_mapper.dart';
+import 'package:test_runner_app/map_system/route_data.dart';
 
 class GeoJsonLoader {
-  static Future<List<RouteData>> loadRoutesFromGeoJson(String assetPath, CoordinateMapper mapper) async {
-    try {
-      print('Lade GeoJSON von: $assetPath');
-      final String jsonString = await rootBundle.loadString(assetPath);
-      final Map<String, dynamic> jsonMap = json.decode(jsonString);
+  static Future<List<RouteData>> loadRoutesFromGeoJson(
+      String path, CoordinateMapper mapper) async {
+    final data = await rootBundle.loadString(path);
+    final json = jsonDecode(data);
 
-      if (jsonMap['type'] != 'FeatureCollection') {
-        print('Ungültiges GeoJSON-Format.');
-        return [];
+    final List<RouteData> routes = [];
+
+    for (int i = 0; i < json['features'].length; i++) {
+      final feature = json['features'][i];
+      final geometry = feature['geometry'];
+      final coords = geometry['coordinates'];
+      final name = feature['properties']?['name'] ?? 'Route ${i + 1}';
+
+      if (geometry['type'] == 'LineString') {
+        final List<Offset> points = coords.map<Offset>((c) {
+          final lon = (c[0] as num).toDouble();
+          final lat = (c[1] as num).toDouble();
+          return mapper.gpsToPixel(lat, lon);
+        }).toList();
+
+        routes.add(RouteData(name: name, points: points));
       }
-
-      final List<RouteData> routes = [];
-
-      for (var feature in jsonMap['features']) {
-        final geometry = feature['geometry'];
-        if (geometry['type'] == 'LineString') {
-          final coordinates = geometry['coordinates'] as List<dynamic>;
-          List<Offset> points = [];
-
-          for (var coord in coordinates) {
-            final lon = (coord[0] as num).toDouble();
-            final lat = (coord[1] as num).toDouble();
-            final mapped = mapper.mapCoordinate(lon, lat);
-
-
-
-            points.add(mapped);
-          }
-
-          if (points.isNotEmpty) {
-
-            routes.add(RouteData(points: points));
-          }
-        }
-      }
-
-
-      return routes;
-    } catch (e) {
-      print('Fehler beim Laden der GeoJSON: $e');
-      return [];
     }
+
+    return routes;
   }
-  }
+}
